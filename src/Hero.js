@@ -1,3 +1,5 @@
+const { Entity } = require("./Entity");
+
 // Enum for weapons allowed
 // for each hero.
 const HEROWEAPONS = {
@@ -5,25 +7,33 @@ const HEROWEAPONS = {
     WIZARD: ["sorcery"]
 }
 
-const WEAPONDAMAGE = {
-    SWORD: 10,
-    JAVELIN: 15,
-    SORCERY: 20
-}
-
 // Preserve values inside of HEROWEAPONS
 // by freezing the object, disallowing
 // the addition and removal of properties.
 Object.freeze(HEROWEAPONS);
-Object.freeze(WEAPONDAMAGE);
 
-module.exports.Hero = class {
+module.exports.Hero = class extends Entity {
     /**
      * 
      * @param {Game} game           The game runtime instance
      * @param {string} heroType     The type of hero
      */
     constructor(game, heroType) {
+        /**
+         * The hero's health.
+         * 
+         * @type number
+         */
+        if (heroType.toLowerCase() === "knight")
+            super(100, heroType);
+        else if (heroType.toLowerCase() === "wizard")
+            super(150, heroType);
+        else
+            throw new Error(
+                `[HERO]: '${heroType}' is an invalid hero!\n` + 
+                `Available heroes: Wizard, Knight`
+            );
+            
         /**
          * The game runtime.
          * 
@@ -34,31 +44,6 @@ module.exports.Hero = class {
          */
         this.game = game
 
-        /**
-         * The hero's health.
-         * 
-         * @type number
-         */
-        if (heroType.toLowerCase() === "knight")
-            this.health = 100;
-        else if (heroType.toLowerCase() === "wizard")
-            this.health = 150;
-        else
-            throw new Error(
-                `[HERO]: '${heroType}' is an invalid hero!\n` + 
-                `Available heroes: Wizard, Knight`
-            );
-
-        /**
-         * The type of hero this is.
-         * 
-         * Possible heroes:
-         *  - Wizard
-         *  - Knight
-         * 
-         * @type string
-         */
-         this.type = heroType;
 
         /**
          * The weapons this hero has.
@@ -185,16 +170,6 @@ module.exports.Hero = class {
                 `[WEAPONS]: A knight cannot learn '${weapon}'!\n` + 
                 `Available weapons for a knight: ${this.formatWeaponsList(knightWeapons).join(", ")}`
             );
-    }
-
-    /**
-     * Calculates the damage of an attack
-     * based on the current weapon equipped.
-     * 
-     * @returns {number}    The amount of damage this attack will deal. 
-     */
-    get damage() {
-        return WEAPONDAMAGE[this.equipped.toUpperCase()];
     }
 
     /**

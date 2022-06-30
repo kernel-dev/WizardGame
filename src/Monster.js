@@ -1,18 +1,22 @@
-const ATTACKDAMAGE = {
-    HIT: 5,
-    FIRESPIT: 20,
-    BITE: 8
-};
+const { Entity } = require("./Entity");
 
-Object.freeze(ATTACKDAMAGE);
-
-module.exports.Monster = class {
+module.exports.Monster = class extends Entity {
     /**
      * 
      * @param {Game} game           The game runtime instance
      * @param {string} monsterType  The type of monster
      */
     constructor(game, monsterType) {
+        if (monsterType.toLowerCase() === "dragon")
+            super(300, monsterType);
+        else if (monsterType.toLowerCase() === "spider")
+            super(200, monsterType);
+        else
+            throw new Error(
+                `[MONSTER]: '${monsterType}' is an invalid monster!\n` + 
+                `Available monsters: Dragon, Spider`
+            );
+
         /**
          * The game runtime.
          * 
@@ -21,35 +25,7 @@ module.exports.Monster = class {
          * 
          * @type Game
          */
-        this.game = game;
-
-        /**
-         * The monster's health.
-         * 
-         * @type number
-         */
-        this.health = 0;
-
-        if (monsterType.toLowerCase() === "dragon")
-            this.health = 300;
-        else if (monsterType.toLowerCase() === "spider")
-            this.health = 200;
-        else
-            throw new Error(
-                `[MONSTER]: '${monsterType}' is an invalid monster!\n` + 
-                `Available monsters: Dragon, Spider`
-            );
-
-        /**
-         * The type of monster this is.
-         * 
-         * Possible monsters:
-         *  - Dragon
-         *  - Spider
-         * 
-         * @type string
-         */
-        this.type = monsterType;
+         this.game = game;
 
         /**
          * The attacks this monster has.

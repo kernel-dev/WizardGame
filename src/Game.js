@@ -144,7 +144,7 @@ module.exports.Game = class {
                     `${hero.type} has attacked ${monster.type} using ${hero.equipped}!\n`
                 );
 
-                monster.health -= hero.damage;
+                hero.attack(monster, hero.equipped);
             }
             else {
                 const attack = monster.attacks[Math.floor(Math.random() * 2)];
@@ -154,7 +154,7 @@ module.exports.Game = class {
                     `${monster.type} has attacked ${hero.type} using ${attack}!\n`
                 );
 
-                hero.health -= monster.calculateDamage(attack);
+                monster.attack(hero, attack);
             }
         }
 
