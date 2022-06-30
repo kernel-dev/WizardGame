@@ -141,21 +141,29 @@ module.exports.Game = class {
             if (rand < 50) {
                 fs.appendFileSync(
                     "log.txt",
-                    `${hero.type} has attacked ${monster.type} using ${hero.equipped}!\n`
+                    `${hero.type} has attacked ${monster.type} using ${hero.equipped}!\n\t` +
+                    `Damage inflicted: ${hero.getDamage(hero.equipped)}\n\t`
                 );
 
                 hero.attack(monster, hero.equipped);
             }
             else {
-                const attack = monster.attacks[Math.floor(Math.random() * 2)];
+                let attack = monster.attacks[Math.floor(Math.random() * 2)];
 
                 fs.appendFileSync(
                     "log.txt",
-                    `${monster.type} has attacked ${hero.type} using ${attack}!\n`
+                    `${monster.type} has attacked ${hero.type} using ${attack}!\n\t` +
+                    `Damage inflicted: ${monster.getDamage(attack)}\n\t`
                 );
 
                 monster.attack(hero, attack);
             }
+
+            fs.appendFileSync(
+                "log.txt",
+                `Hero health remaining: ${hero.health}\n\t` +
+                `Monster health remaining: ${monster.health}\n\n`
+            )
         }
 
         hero.inDuel = false;
