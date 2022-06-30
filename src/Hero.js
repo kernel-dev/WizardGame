@@ -97,13 +97,6 @@ module.exports.Hero = class {
         if (this.weapons.length === 2)
             throw new Error(`[EQUIP]: Cannot equip more than 2 weapons at a time!`);
 
-        // Remove weapon from the available
-        // weapons list in the game instance.
-        // this.game.weapons.splice(
-        //     this.game.weapons.indexOf(weapon.toLowerCase()),
-        //     1
-        // );
-
         this.weapons.push(weapon.toLowerCase());
         this.equipped = weapon.toLowerCase();
     }
